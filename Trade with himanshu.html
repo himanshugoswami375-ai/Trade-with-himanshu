@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Trade with Himanshu</title>
+<style>
+  :root{
+    --bg:#0d0f16; --card:#1b1f2b; --accent:#4db8ff; --muted:#777;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff;transition:0.25s}
+  body.light{background:#fff;color:#111}
+  header{padding:36px;text-align:center;background:#131722;position:relative}
+  header h1{margin:6px 0;font-size:2.3rem}
+  header p{margin:0;color:var(--muted)}
+  section{max-width:1000px;margin:22px auto;padding:0 18px}
+  .card{background:var(--card);padding:18px;border-radius:12px;margin:20px 0;box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+  h2{color:var(--accent);margin-top:0}
+  .btn{display:inline-block;padding:10px 16px;border-radius:8px;background:var(--accent);color:#000;font-weight:700;text-decoration:none;border:none;cursor:pointer}
+  footer{text-align:center;padding:18px;margin-top:30px;color:var(--muted);background:#111418}
+
+  form.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  label{display:block;font-size:13px;margin-bottom:6px;color:#cfd8e3}
+  input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea{
+    width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0f1116;color:#fff;font-size:14px
+  }
+  textarea{min-height:70px;resize:vertical}
+  .small-muted{font-size:13px;color:#9aa6c0;margin-top:8px}
+
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{padding:8px;border:1px solid #333;font-size:13px;color:#e6eef8}
+  th{background:#12141a;text-align:left}
+  .table-wrap{overflow:auto;border-radius:8px}
+
+  .follow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .follow .btn{margin:6px}
+  @media (max-width:880px){
+    form.grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button onclick="toggleTheme()" style="position:absolute;right:18px;top:18px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer">🌗 Mode</button>
+  <!-- Use local logo.png in same folder or change src -->
+  <img src="logo.png" alt="logo" style="width:110px;height:auto;display:block;margin:0 auto 10px">
+  <h1>Trade with Himanshu</h1>
+  <p>Track trades • Manage risk • Learn & improve</p>
+</header>
+
+<section>
+
+  <!-- Follow + Subscribe -->
+  <div class="card" style="text-align:center;border:2px solid var(--accent)">
+    <h2>📣 Follow Me</h2>
+    <p class="small-muted">Stay connected for trading updates, tips & daily insights</p>
+    <div class="follow" style="margin-top:10px">
+      <a class="btn" href="https://www.instagram.com/himanshu_goswami_0808" target="_blank">Instagram</a>
+      <a class="btn" href="https://youtube.com/@himanshugoswami0808" target="_blank">YouTube</a>
+      <button class="btn" style="background:#ff0000;color:#fff">🔔 Subscribe</button>
+    </div>
+  </div>
+
+  <!-- Today's Log + Screenshot -->
+  <div class="card">
+    <h2>📝 Today's Log</h2>
+    <p class="small-muted">Write notes, upload screenshots, stay consistent.</p>
+
+    <a class="btn" href="#" style="margin-bottom:12px;display:inline-block">➕ Add Today's Log</a>
+
+    <div style="margin-top:12px;padding:12px;background:#0f1116;border-radius:10px">
+      <label for="todayScreenshot">📸 Upload Today’s Trade Screenshot</label>
+      <input id="todayScreenshot" type="file" accept="image/*">
+      <div id="previewArea" style="display:none;margin-top:12px">
+        <p style="color:var(--accent);margin:0 0 8px">Preview:</p>
+        <img id="previewImage" src="" style="width:100%;border-radius:8px">
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Management Form (Option B: 2-col clean form) -->
+  <div class="card">
+    <h2>Risk Management Tracker</h2>
+    <p class="small-muted">Fill trade details below — press Calculate → Save to store the trade.</p>
+
+    <form id="riskForm" class="grid" onsubmit="return false;">
+      <!-- Row 1 -->
+      <div>
+        <label>Date of Buy</label>
+        <input id="dateBuy" type="date">
+      </div>
+      <div>
+        <label>Date of Sell</label>
+        <input id="dateSell" type="date">
+      </div>
+
+      <!-- Row 2 -->
+      <div>
+        <label>Symbol</label>
+        <input id="symbol" type="text" placeholder="e.g. NIFTY, TCS">
+      </div>
+      <div>
+        <label>Direction</label>
+        <select id="direction">
+          <option>Buy</option>
+          <option>Sell</option>
+        </select>
+      </div>
+
+      <!-- Row 3 -->
+      <div>
+        <label>Entry Price</label>
+        <input id="entry" type="number" step="any" placeholder="Entry price">
+      </div>
+      <div>
+        <label>Entry Time</label>
+        <input id="entryTime" type="time">
+      </div>
+
+      <!-- Row 4 -->
+      <div>
+        <label>Stop Loss</label>
+        <input id="sl" type="number" step="any" placeholder="Stop Loss">
+      </div>
+      <div>
+        <label>Target</label>
+        <input id="target" type="number" step="any" placeholder="Target">
+      </div>
+
+      <!-- Row 5 -->
+      <div>
+        <label>Risk : Reward (auto)</label>
+        <input id="rr" type="text" readonly placeholder="Calculated R:R">
+      </div>
+      <div>
+        <label>Risk (₹) — auto</label>
+        <input id="riskRs" type="text" readonly placeholder="Calculated risk in ₹">
+      </div>
+
+      <!-- Row 6 -->
+      <div>
+        <label>Position Size (Qty)</label>
+        <input id="qty" type="number" step="1" placeholder="Qty / position size">
+      </div>
+      <div>
+        <label>Exit Price</label>
+        <input id="exitPrice" type="number" step="any" placeholder="Exit price">
+      </div>
+
+      <!-- Row 7 -->
+      <div>
+        <label>Exit Time</label>
+        <input id="exitTime" type="time">
+      </div>
+      <div>
+        <label>Date of Exit</label>
+        <input id="dateExit" type="date">
+      </div>
+
+      <!-- Row 8 -->
+      <div>
+        <label>P/L (%) — auto</label>
+        <input id="plPercent" type="text" readonly placeholder="Profit / Loss %">
+      </div>
+      <div>
+        <label>P/L (₹) — auto</label>
+        <input id="plRs" type="text" readonly placeholder="Profit / Loss in ₹">
+      </div>
+
+      <!-- Row 9 -->
+      <div>
+        <label>Win / Loss</label>
+        <select id="winLoss">
+          <option>Win</option>
+          <option>Loss</option>
+          <option>Breakeven</option>
+        </select>
+      </div>
+      <div>
+        <label>Setup</label>
+        <select id="setup">
+          <option>Breakout</option>
+          <option>Breakdown</option>
+          <option>Reversal</option>
+          <option>EMA Retest</option>
+          <option>Pullback</option>
+          <option>Range</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <!-- Row 10 -->
+      <div style="grid-column:1 / -1">
+        <label>Mistake (what went wrong)</label>
+        <textarea id="mistake" placeholder="Write mistake (useful for learning)"></textarea>
+      </div>
+
+      <!-- Row 11 -->
+      <div style="grid-column:1 / -1">
+        <label>Lesson (what you'll do next time)</label>
+        <textarea id="lesson" placeholder="Your lesson & action plan"></textarea>
+      </div>
+
+    </form>
+
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="doCalculate()">Calculate</button>
+      <button class="btn" onclick="saveFullTrade()">Save Trade</button>
+      <button class="btn" style="background:#3aff7a" onclick="exportExcel()">Export to Excel</button>
+      <button class="btn" style="background:#ff7a7a" onclick="clearForm()">Clear</button>
+    </div>
+
+    <p class="small-muted" style="margin-top:10px">Calculated values show up in the read-only fields above. Fill Exit Price to compute P/L.</p>
+  </div>
+
+  <!-- Saved Trades Table -->
+  <div class="card">
+    <h2>Saved Trades</h2>
+    <div class="table-wrap">
+      <table id="savedTrades">
+        <thead>
+          <tr>
+            <th>Date Buy</th><th>Date Sell</th><th>Symbol</th><th>Direction</th>
+            <th>Entry</th><th>Entry Time</th><th>SL</th><th>Target</th>
+            <th>R:R</th><th>Risk (₹)</th><th>Position Size</th><th>Exit Price</th><th>Exit Time</th><th>Date Exit</th>
+            <th>P/L %</th><th>P/L (₹)</th><th>Win/Loss</th><th>Setup</th><th>Mistake</th><th>Lesson</th>
+          </tr>
+        </thead>
+        <tbody id="tradesBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Short risk topics -->
+  <div class="card">
+    <h2>Risk Management Topics</h2>
+    <ul>
+      <li>Position sizing strategies</li>
+      <li>Risk per trade calculation</li>
+      <li>Reward expectancy & risk–reward ratio</li>
+      <li>Stop-loss placement techniques</li>
+      <li>Capital protection rules & drawdown control</li>
+      <li>Emotional discipline & rule-based trading</li>
+    </ul>
+  </div>
+
+</section>
+
+<footer>© 2025 Trade with Himanshu. All Rights Reserved.</footer>
+
+<script>
+/* Theme toggle (header button) */
+function toggleTheme(){
+  document.body.classList.toggle('light');
+}
+
+/* Helpers */
+function toNum(v){ return v === '' || v === null || isNaN(v) ? 0 : parseFloat(v); }
+
+/* Calculate risk/reward and P/L */
+function doCalculate(){
+  const entry = toNum(document.getElementById('entry').value);
+  const sl = toNum(document.getElementById('sl').value);
+  const target = toNum(document.getElementById('target').value);
+  const qty = toNum(document.getElementById('qty').value);
+
+  // Basic protection
+  if(!qty || !entry){ 
+    // still compute R:R if possible
+  }
+
+  const riskPerUnit = Math.abs(entry - sl);
+  const rewardPerUnit = Math.abs(target - entry);
+  const riskRs = riskPerUnit * qty;
+  const rewardRs = rewardPerUnit * qty;
+  const rr = (riskPerUnit > 0) ? (rewardPerUnit / riskPerUnit).toFixed(2) : '--';
+
+  document.getElementById('rr').value = rr;
+  document.getElementById('riskRs').value = isFinite(riskRs) ? riskRs.toFixed(2) : '--';
+
+  // If exit price provided compute P/L
+  const exit = toNum(document.getElementById('exitPrice').value);
+  if(exit && entry && qty){
+    const plRs = (exit - entry) * qty * (document.getElementById('direction').value === 'Buy' ? 1 : -1);
+    const plPercent = ((exit - entry) / entry) * 100 * (document.getElementById('direction').value === 'Buy' ? 1 : -1);
+    document.getElementById('plRs').value = plRs.toFixed(2);
+    document.getElementById('plPercent').value = plPercent.toFixed(2) + '%';
+  } else {
+    document.getElementById('plRs').value = '--';
+    document.getElementById('plPercent').value = '--';
+  }
+}
+
+/* Clear form */
+function clearForm(){
+  const ids = ['dateBuy','dateSell','symbol','direction','entry','entryTime','sl','target','rr','riskRs','qty','exitPrice','exitTime','dateExit','plPercent','plRs','winLoss','setup','mistake','lesson'];
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.value = (el.tagName === 'SELECT' ? el.options[0].value : ''); });
+  document.getElementById('rr').value='';
+  document.getElementById('riskRs').value='';
+  document.getElementById('plRs').value='';
+  document.getElementById('plPercent').value='';
+}
+
+/* Save full trade to table */
+function saveFullTrade(){
+  // Ensure calculation up-to-date
+  doCalculate();
+
+  const rowData = {
+    dateBuy: document.getElementById('dateBuy').value || '',
+    dateSell: document.getElementById('dateSell').value || '',
+    symbol: document.getElementById('symbol').value || '',
+    direction: document.getElementById('direction').value || '',
+    entry: document.getElementById('entry').value || '',
+    entryTime: document.getElementById('entryTime').value || '',
+    sl: document.getElementById('sl').value || '',
+    target: document.getElementById('target').value || '',
+    rr: document.getElementById('rr').value || '',
+    riskRs: document.getElementById('riskRs').value || '',
+    qty: document.getElementById('qty').value || '',
+    exitPrice: document.getElementById('exitPrice').value || '',
+    exitTime: document.getElementById('exitTime').value || '',
+    dateExit: document.getElementById('dateExit').value || '',
+    plPercent: document.getElementById('plPercent').value || '',
+    plRs: document.getElementById('plRs').value || '',
+    winLoss: document.getElementById('winLoss').value || '',
+    setup: document.getElementById('setup').value || '',
+    mistake: document.getElementById('mistake').value.replace(/\n/g, ' \\n ') || '',
+    lesson: document.getElementById('lesson').value.replace(/\n/g, ' \\n ') || ''
+  };
+
+  const tbody = document.getElementById('tradesBody');
+  const tr = document.createElement('tr');
+
+  // Insert columns in order of your 18 fields
+  tr.innerHTML = `
+    <td>${escapeHtml(rowData.dateBuy)}</td>
+    <td>${escapeHtml(rowData.dateSell)}</td>
+    <td>${escapeHtml(rowData.symbol)}</td>
+    <td>${escapeHtml(rowData.direction)}</td>
+    <td>${escapeHtml(rowData.entry)}</td>
+    <td>${escapeHtml(rowData.entryTime)}</td>
+    <td>${escapeHtml(rowData.sl)}</td>
+    <td>${escapeHtml(rowData.target)}</td>
+    <td>${escapeHtml(rowData.rr)}</td>
+    <td>${escapeHtml(rowData.riskRs)}</td>
+    <td>${escapeHtml(rowData.qty)}</td>
+    <td>${escapeHtml(rowData.exitPrice)}</td>
+    <td>${escapeHtml(rowData.exitTime)}</td>
+    <td>${escapeHtml(rowData.dateExit)}</td>
+    <td>${escapeHtml(rowData.plPercent)}</td>
+    <td>${escapeHtml(rowData.plRs)}</td>
+    <td>${escapeHtml(rowData.winLoss)}</td>
+    <td>${escapeHtml(rowData.setup)}</td>
+    <td style="max-width:220px;white-space:pre-wrap;">${escapeHtml(rowData.mistake)}</td>
+    <td style="max-width:220px;white-space:pre-wrap;">${escapeHtml(rowData.lesson)}</td>
+  `;
+
+  tbody.appendChild(tr);
+  // Optionally clear form after save:
+  // clearForm();
+  alert('Trade saved to table ✅');
+}
+
+/* Export saved trades to Excel (simple HTML table to xls) */
+function exportExcel(){
+  const table = document.getElementById('savedTrades').outerHTML;
+  const file = new Blob([table], {type:'application/vnd.ms-excel'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(file);
+  a.download = 'Trades_export.xls';
+  a.click();
+}
+
+/* Basic safe HTML escape */
+function escapeHtml(text){
+  if(!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/* Screenshot preview for Today's log */
+document.getElementById('todayScreenshot').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    document.getElementById('previewArea').style.display = 'block';
+    document.getElementById('previewImage').src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+
+</body>
+</html>
+<script>
+// Load saved trades on page load
+document.addEventListener("DOMContentLoaded", function () {
+    loadTrades();
+});
+
+// Save trade
+function saveTrade() {
+    let trade = {
+        dateBuy: document.getElementById("dateBuy").value,
+        dateSell: document.getElementById("dateSell").value,
+        symbol: document.getElementById("symbol").value,
+        direction: document.getElementById("direction").value,
+        entryPrice: document.getElementById("entryPrice").value,
+        entryTime: document.getElementById("entryTime").value,
+        stopLoss: document.getElementById("stopLoss").value,
+        target: document.getElementById("target").value,
+        rr: document.getElementById("rr").value,
+        riskRs: document.getElementById("riskRs").value,
+        positionSize: document.getElementById("positionSize").value,
+        exitPrice: document.getElementById("exitPrice").value,
+        exitTime: document.getElementById("exitTime").value,
+        dateExit: document.getElementById("dateExit").value,
+        pl: document.getElementById("pl").value,
+        plRs: document.getElementById("plRs").value,
+        result: document.getElementById("result").value,
+        setup: document.getElementById("setup").value,
+        mistake: document.getElementById("mistake").value,
+        lesson: document.getElementById("lesson").value,
+        screenshot: document.getElementById("screenshot").value
+    };
+
+    let trades = JSON.parse(localStorage.getItem("trades")) || [];
+    trades.push(trade);
+    localStorage.setItem("trades", JSON.stringify(trades));
+
+    alert("Trade saved!");
+    loadTrades();
+}
+
+// Load saved trades into table
+function loadTrades() {
+    let trades = JSON.parse(localStorage.getItem("trades")) || [];
+    let table = document.getElementById("tradeTableBody");
+
+    table.innerHTML = "";
+
+    trades.forEach((t, i) => {
+        let row = `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${t.dateBuy}</td>
+            <td>${t.dateSell}</td>
+            <td>${t.symbol}</td>
+            <td>${t.direction}</td>
+            <td>${t.entryPrice}</td>
+            <td>${t.entryTime}</td>
+            <td>${t.stopLoss}</td>
+            <td>${t.target}</td>
+            <td>${t.rr}</td>
+            <td>${t.riskRs}</td>
+            <td>${t.positionSize}</td>
+            <td>${t.exitPrice}</td>
+            <td>${t.exitTime}</td>
+            <td>${t.dateExit}</td>
+            <td>${t.pl}</td>
+            <td>${t.plRs}</td>
+            <td>${t.result}</td>
+            <td>${t.setup}</td>
+            <td>${t.mistake}</td>
+            <td>${t.lesson}</td>
+            <td><a href="${t.screenshot}" target="_blank">View</a></td>
+        </tr>`;
+        table.innerHTML += row;
+    });
+}
+</script>
